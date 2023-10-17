@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Input } from "@nextui-org/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Button } from "../ui/button";
 import ReactInputVerificationCode from "react-input-verification-code";
@@ -11,6 +11,10 @@ import axios from "axios";
 import Countdown from "react-countdown";
 import { AnimatePresence, motion as m } from "framer-motion";
 import { ThreeDots } from "react-loader-spinner";
+import Link from "next/link";
+import { lockfilePatchPromise } from "next/dist/build/swc";
+import { register } from "@/redux/slices/registerSlice";
+import { useToast } from "../ui/use-toast";
 const PhoneNumber = () => {
   const router = useRouter();
   const userData = useSelector((state: RootState) => state.register.data);
@@ -36,6 +40,7 @@ const PhoneNumber = () => {
       setErr({ ...err, phone: "Phone format is invalid" });
     }
   };
+  const { toast } = useToast();
   const handleSubmit = () => {
     setisloading(true);
     if (isvalidphone(phone)) {
@@ -46,7 +51,15 @@ const PhoneNumber = () => {
         })
         .then((res) => {
           setcodeAPi(res.data.code);
+          toast({
+            title: "Success code was sended to your number",
+            description:
+              "Hello " +
+              userData.fullname +
+              " please verify your phone number to continue",
+          });
           setisloading(false);
+          dispatch(register({ ...userData, phonenumber: phone }));
           setShowCodeComponent(!showCodeComponent);
         })
         .catch((err) => {
@@ -54,11 +67,46 @@ const PhoneNumber = () => {
         });
     }
   };
+  const resendCode = () => {
+    setisloading(true);
+    if (isvalidphone(phone)) {
+      axios
+        .post("http://localhost:3001/sendcode", {
+          name: userData.fullname,
+          phone: phone,
+        })
+        .then((res) => {
+          setcodeAPi(res.data.code);
+          setisloading(false);
+          dispatch(register({ ...userData, phonenumber: phone }));
+          setShowCodeComponent(!showCodeComponent);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+  const dispatch = useDispatch();
+
   const handleContinue = () => {
     if (codeAPi == code) {
       setisloadingcontinue(true);
+      let data = JSON.stringify(userData);
+      localStorage.setItem("session", data);
+      axios
+        .post("http://localhost:3001/sign", {
+          data: userData,
+        })
+        .then((res) => {
+          setisloadingcontinue(false);
+          //routing to home for the first time
+        })
+        .catch((err) => {
+          setisloadingcontinue(false);
+          console.log(err);
+        });
     } else {
-      setisloadingcontinue(false)
+      setisloadingcontinue(false);
       setErr({ ...err, code: "The code your entered is incorrect" });
       setTimeout(() => {
         setErr({ ...err, code: "" });
@@ -169,7 +217,10 @@ const PhoneNumber = () => {
               variant="ghost"
               className="font-semibold hover:underline w-full"
             >
-              Resened ?
+              <Link href={"/register"} onClick={resendCode}>
+                {" "}
+                Resened ?
+              </Link>
             </Button>
           </m.div>
         )}
@@ -177,7 +228,9 @@ const PhoneNumber = () => {
     </div>
   );
 };
-const Completionist = () => <span>You are good to go!</span>;
+const Completionist = () => (
+  <span>Code expires , you can resend a new code</span>
+);
 const renderer = ({ hours, minutes, seconds, completed }: any) => {
   if (completed) {
     // Render a completed state

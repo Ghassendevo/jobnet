@@ -13,7 +13,9 @@ import {
   isvalidName,
   isvalidPassword,
 } from "@/functions/functions";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next-nprogress-bar";
+import axios from "axios";
+import Link from "next/link";
 
 const Create_account = () => {
   const disptach: AppDispatch = useDispatch();
@@ -85,8 +87,18 @@ const Create_account = () => {
   const handleSubmit = () => {
     setisloading(true);
     if (isAllinputsValid()) {
-      dispatch(register(form));
-      router.push("/register//phone");
+      axios
+        .post("http://localhost:3001/verifyemail", {
+          email: form.email,
+        })
+        .then((res) => {
+          setisloading(false);
+          if (res.data) setErr({ ...err, email: "email is already exist" });
+          else dispatch(register(form)), router.push("/register//phone");
+        })
+        .catch((err) => {
+          alert(err);
+        });
     }
   };
   return (
@@ -119,7 +131,7 @@ const Create_account = () => {
             handleEmail(e.target.value)
           }
           isInvalid={err.email ? true : false}
-          errorMessage={err.email ? "Email not valid" : false}
+          errorMessage={err.email ? err.email : false}
           type="email"
           label="Email"
           variant="bordered"
@@ -179,6 +191,7 @@ const Create_account = () => {
             </>
           )}
         </Button>
+        <Link href={"/login"} className="hover:underline text-center text-gray-700 ">Already have an account ? Login </Link>
       </div>
     </div>
   );

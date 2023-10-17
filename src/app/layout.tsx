@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider/Theme-provider";
 import ProgressBar from "@/components/progressBar/ProgressBar";
 import store from "@/redux/store";
 import ReduxProvider from "@/components/reduxProvider/ReduxProvider";
+import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -28,7 +29,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ReduxProvider>{children}</ReduxProvider>
+          <ReduxProvider>
+            {children} <Toaster />
+          </ReduxProvider>
         </ThemeProvider>
       </body>
     </html>
