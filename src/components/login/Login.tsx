@@ -5,11 +5,23 @@ import { ThreeDots } from "react-loader-spinner";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { Input } from "@nextui-org/react";
 import { isvalidEmail, isvalidPassword } from "@/functions/functions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
-
+import { motion as m } from "framer-motion";
+import axios from "axios";
+import { login } from "@/redux/slices/sessionSlice";
+import { RootState } from "@/redux/store";
+interface sessionData {
+  fullname: string;
+  email: string;
+  password: string;
+  phone: string;
+  username: string;
+  _id: string;
+}
 const Login = () => {
   const [isloading, setisloading] = useState(false);
+  const [invalidinfo, setinvalidinfo] = useState(false);
   const [form, setForm] = useState({
     emailusername: "",
     password: "",
@@ -19,13 +31,7 @@ const Login = () => {
     password: "",
   });
   const handleEmail = (value: string) => {
-    if (isvalidEmail(value))
-      setForm({ ...form, emailusername: value }), setErr({ ...err, email: "" });
-    else
-      setErr({
-        ...err,
-        email: "Email not valid",
-      });
+    setForm({ ...form, emailusername: value }), setErr({ ...err, email: "" });
   };
   const handlePass = (value: string) => {
     if (isvalidPassword(value))
@@ -44,8 +50,31 @@ const Login = () => {
   const dispatch = useDispatch();
   const handleSubmit = () => {
     setisloading(true);
+
     if (isAllinputsValid()) {
-      //axios
+      axios
+        .post("http://localhost:3001/login", {
+          data: {
+            email: form.emailusername,
+            password: form.password,
+          },
+        })
+        .then((res) => {
+          if (res.data.msg) {
+            localStorage.setItem("session", JSON.stringify(res.data.user));
+            let data: sessionData = res.data.user;
+            dispatch(login({ data: data, loggedin: true }));
+          } else {
+            setinvalidinfo(true);
+            setTimeout(() => {
+              setinvalidinfo(false);
+            }, 3000);
+          }
+          setisloading(false);
+        })
+        .catch((err) => {
+          alert(err);
+        });
     }
   };
   return (
@@ -62,7 +91,7 @@ const Login = () => {
           isInvalid={err.email ? true : false}
           errorMessage={err.email ? err.email : false}
           type="email"
-          label="Email"
+          label="Email or username"
           variant="bordered"
           className="w-full"
           size="sm"
@@ -85,6 +114,16 @@ const Login = () => {
             size="sm"
           />
         </div>
+        {invalidinfo && (
+          <m.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="text-red-600 text-sm"
+          >
+            Incorrect information , please try again .
+          </m.p>
+        )}
         <Button
           disabled={!isAllinputsValid()}
           onClick={handleSubmit}
@@ -103,7 +142,12 @@ const Login = () => {
             />
           )) || <> Sign in</>}
         </Button>
-        <Link href={"/register"} className="hover:underline text-center text-gray-700 ">Create new account ?</Link>
+        <Link
+          href={"/register"}
+          className="hover:underline text-center text-gray-700 "
+        >
+          Create new account ?
+        </Link>
       </div>
     </div>
   );

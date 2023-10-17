@@ -2,9 +2,11 @@
 
 import { configureStore } from "@reduxjs/toolkit";
 import registerReducer from "./slices/registerSlice";
+import sessionReducer from "./slices/sessionSlice";
 const store = configureStore({
   reducer: {
-    register: registerReducer, // Add your "register" slice reducer here
+    register: registerReducer,
+    session: sessionReducer, // Add your "register" slice reducer here
   },
 });
 
