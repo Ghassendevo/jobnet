@@ -9,6 +9,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -42,21 +44,42 @@ const Header = () => {
   const logout = () => {
     localStorage.removeItem("session");
   };
+  const [position, setPosition] = React.useState("jobs");
   return (
     <div className="shadow-sm h-16 flex justify-between pl-36 pr-36 items-center">
       <div className="logo">
         <h3 className="text-black  ">JobNet</h3>
       </div>
       <div className="menu flex flex-row w-[60%]  justify-between gap-4">
-        <div className="search flex items-center justify-center">
+        <div className="search flex items-center  justify-center">
           <Input
-            isClearable
-            size="sm"
+            size="md"
             type="email"
-            label="Search for users"
             variant="bordered"
             placeholder="Search..."
             className="w-full"
+            endContent={
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="rounded-lg w-[15vh]" size={"sm"} >for {position}</Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuLabel>Search type</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuRadioGroup
+                    value={position}
+                    onValueChange={setPosition}
+                  >
+                    <DropdownMenuRadioItem value="jobs">
+                      Jobs
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="talents">
+                      Talents
+                    </DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            }
           />
         </div>
         <div className="icons flex items-center justify-between  w-[50%] gap-4">

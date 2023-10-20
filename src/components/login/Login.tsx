@@ -11,6 +11,8 @@ import { motion as m } from "framer-motion";
 import axios from "axios";
 import { login } from "@/redux/slices/sessionSlice";
 import { RootState } from "@/redux/store";
+import { useRouter } from "next-nprogress-bar";
+
 interface sessionData {
   fullname: string;
   email: string;
@@ -20,6 +22,7 @@ interface sessionData {
   _id: string;
 }
 const Login = () => {
+  const router = useRouter()
   const [isloading, setisloading] = useState(false);
   const [invalidinfo, setinvalidinfo] = useState(false);
   const [form, setForm] = useState({
@@ -64,6 +67,7 @@ const Login = () => {
             localStorage.setItem("session", JSON.stringify(res.data.user));
             let data: sessionData = res.data.user;
             dispatch(login({ data: data, loggedin: true }));
+            router.push("/")
           } else {
             setinvalidinfo(true);
             setTimeout(() => {

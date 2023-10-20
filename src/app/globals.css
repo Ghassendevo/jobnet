@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Asap:wght@100;300&family=Lato:wght@100;300;400;700;900&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@300;400;500;600&family=Roboto:wght@100&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Asap:wght@100;300&family=Comic+Neue:wght@200;300;400;500;700&family=Inter+Tight:wght@200&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@300;400;500;600&family=Roboto:wght@100&display=swap');
 html,
 body {
     font-family: 'Lato', sans-serif !important;
