@@ -1,4 +1,5 @@
-import React, { HtmlHTMLAttributes, useState } from "react";
+"use client"
+import React, { HtmlHTMLAttributes, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import folderimg from "../../../assets/folder.gif";
@@ -20,20 +21,39 @@ import {
   Textarea,
   useSelect,
 } from "@nextui-org/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-
+import axios from "axios";
+import { post } from "@/redux/slices/jobsSlice";
+import { register } from "module";
+import { login } from "@/redux/slices/sessionSlice";
+interface usedData {
+  fullname: string;
+  email: string;
+  password: string;
+  phone: string;
+  username: string;
+  _id: string;
+}
 const Boostproject = () => {
   const categorys = [
     "Web development",
     "mobile development",
     "cloud computing",
   ];
+  useEffect(() => {
+    let local = localStorage.getItem("session");
+    if (local) {
+      let userdata: usedData = JSON.parse(local);
+      dispatch(login({ data: { ...userdata }, loggedin: true }));
+    }
+  }, []);
+  const [isloading, setisloading] = useState(false);
   const user = useSelector((state: RootState) => state.session.data);
   const [form, setForm] = useState({
     userid: user._id,
     title: "",
-    category: "",
+    category: "Web development",
     description: "",
     budgetfrom: "",
     budgetto: "",
@@ -46,7 +66,17 @@ const Boostproject = () => {
     budgetto: "",
   });
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, title: e.target.value });
+    let regex = /^[a-zA-Z ]{5,}$/;
+    if (regex.test(e.target.value)) {
+      setForm({ ...form, title: e.target.value });
+      setErr({ ...err, title: "" });
+    } else {
+      setErr({
+        ...err,
+        title:
+          "Title length should be more that 5 , and not contain special caracters",
+      });
+    }
   };
   const handleCat = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setForm({ ...form, category: e.target.value });
@@ -59,6 +89,51 @@ const Boostproject = () => {
   };
   const handleDesc = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, description: e.target.value });
+  };
+  const validform = () => {
+    if (
+      form.title &&
+      form.budgetfrom &&
+      form.budgetto &&
+      form.category &&
+      form.description &&
+      !err.title &&
+      !err.budgetfrom &&
+      !err.budgetto &&
+      !err.category &&
+      !err.description
+    ) {
+      return true;
+    }
+    return false;
+  };
+  const dispatch = useDispatch();
+  const handlesubmit = () => {
+    if (validform()) {
+      setisloading(true);
+      axios
+        .post("http://localhost:3001/addPost", {
+          data: {
+            user: user._id,
+            fullname: user.fullname,
+            title: form.title,
+            budgetFrom: form.budgetfrom,
+            budgetTo: form.budgetto,
+            bids: 0,
+            description: form.description,
+            star: 0,
+            categorie: form.category,
+          },
+        })
+        .then((res) => {
+          dispatch(post(res.data));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setisloading(false);
+    }
   };
   return (
     <div className="w-[full] p-10  shadow-sm flex flex-row justify-between">
@@ -75,7 +150,9 @@ const Boostproject = () => {
           </SheetTrigger>
           <SheetContent className="sm:w-[540px] md:w-[100vh] w-[100%] md:max-w-[400vh] overflow-scroll">
             <SheetHeader>
-              <Link className="text-sm text-yellow-600 hover:underline" href="">Open in a new window <LinkIcon /> </Link>
+              <Link className="text-sm text-yellow-600 hover:underline" href="">
+                Open in a new window <LinkIcon />{" "}
+              </Link>
               <SheetTitle>Project overview</SheetTitle>
               <SheetDescription>
                 Jobnet will help you to find the best talents for your job
@@ -90,6 +167,8 @@ const Boostproject = () => {
                 </p>
                 <Input
                   variant="bordered"
+                  isInvalid={(err.title && true) || false}
+                  errorMessage={err.title}
                   startContent={
                     <p className="text-xs  w-[90px] font-semibold">
                       You will get a{" "}
@@ -108,21 +187,25 @@ const Boostproject = () => {
                   Select a category so it's easy for clients to find your
                   project.
                 </p>
-                <Select
-                  variant={"bordered"}
-                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                    handleCat(e)
-                  }
-                  label="Select a category"
-                  className="w-full"
-                  size="sm"
-                >
-                  {categorys.map((cat) => (
-                    <SelectItem key={cat} value={cat}>
-                      {cat}
-                    </SelectItem>
-                  ))}
-                </Select>
+                <div className="flex w-full flex-wrap md:flex-nowrap gap-4 z-10">
+                  {" "}
+                  <Select
+                    variant={"bordered"}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                      handleCat(e)
+                    }
+                    label="Select a category"
+                    className="w-full"
+                    size="sm"
+                    defaultSelectedKeys="0"
+                  >
+                    {categorys.map((cat, index) => (
+                      <SelectItem className="z-10" key={index} value={cat}>
+                        {cat}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                </div>
               </div>
               <div className="title w-full flex flex-col gap-1 border border-b-gray-300 pb-5 border-white">
                 <p className="font-semibold">Budget</p>
@@ -176,7 +259,13 @@ const Boostproject = () => {
             </div>
             <SheetFooter className=" pt-10 flex flex-row w-full  justify-start gap-4">
               <Button variant="ghost">cancel</Button>
-              <Button className="bg-yellow-300 text-black w-[13vh] hover:bg-yellow-400">Post job</Button>
+              <Button
+                disabled={!validform()}
+                onClick={handlesubmit}
+                className="bg-yellow-300 text-black w-[13vh] hover:bg-yellow-400"
+              >
+                Post job
+              </Button>
             </SheetFooter>
           </SheetContent>
         </Sheet>

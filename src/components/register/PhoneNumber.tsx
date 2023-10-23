@@ -15,6 +15,15 @@ import Link from "next/link";
 import { lockfilePatchPromise } from "next/dist/build/swc";
 import { register } from "@/redux/slices/registerSlice";
 import { useToast } from "../ui/use-toast";
+import { login } from "@/redux/slices/sessionSlice";
+interface sessionData {
+  fullname: string;
+  email: string;
+  password: string;
+  phone: string;
+  username: string;
+  _id: string;
+}
 const PhoneNumber = () => {
   const router = useRouter();
   const userData = useSelector((state: RootState) => state.register.data);
@@ -99,7 +108,9 @@ const PhoneNumber = () => {
         })
         .then((res) => {
           setisloadingcontinue(false);
-          //routing to home for the first time
+            localStorage.setItem("session", JSON.stringify(res.data.user));
+            let data: sessionData = res.data.user;
+            dispatch(login({ data: data, loggedin: true }));
         })
         .catch((err) => {
           setisloadingcontinue(false);
