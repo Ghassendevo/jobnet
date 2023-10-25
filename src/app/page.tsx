@@ -14,6 +14,7 @@ export default async function Home() {
       <Header />
       <Boostproject />
       <Jobs data={data} />
+      <ModeToggle />
     </main>
   );
 }
