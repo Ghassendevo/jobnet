@@ -13,8 +13,11 @@ const loading = () => {
         <div className="flex justify-between gap-4 flex-wrap">
           <div className="flex-3 w-[70%] gap-4  rounded-3xl">
             <Skeleton className="w-full h-[200px] rounded-3xl" />
+            <br />
             <Skeleton className="w-full h-[200px] rounded-3xl" />
+            <br />
             <Skeleton className="w-full h-[200px] rounded-3xl" />
+            <br />
             <Skeleton className="w-full h-[200px] rounded-3xll" />
           </div>
           <div className="flex-1">

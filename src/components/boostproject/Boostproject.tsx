@@ -159,7 +159,7 @@ const Boostproject = () => {
               </SheetDescription>
             </SheetHeader>
             <div className="pt-10 w-full gap-7 flex flex-col">
-              <div className="title w-full flex flex-col gap-1 border border-b-gray-300 pb-5 border-white">
+              <div className="title w-full flex flex-col gap-1 dark:border-none border border-b-gray-300 pb-5 border-white">
                 <p className="font-semibold">Title</p>
                 <p className="text-sm">
                   Tell the client what you will deliver and how it benefits
@@ -181,7 +181,7 @@ const Boostproject = () => {
                   0/75 characters (min. 7 words)
                 </p>
               </div>
-              <div className="title w-full flex flex-col gap-1 border border-b-gray-300 pb-5 border-white">
+              <div className="title w-full flex flex-col gap-1 dark:border-none border border-b-gray-300 pb-5 border-white">
                 <p className="font-semibold">Category</p>
                 <p className="text-sm">
                   Select a category so it's easy for clients to find your
@@ -207,7 +207,7 @@ const Boostproject = () => {
                   </Select>
                 </div>
               </div>
-              <div className="title w-full flex flex-col gap-1 border border-b-gray-300 pb-5 border-white">
+              <div className="title w-full flex flex-col gap-1 dark:border-none border border-b-gray-300 pb-5 border-white">
                 <p className="font-semibold">Budget</p>
                 <p className="text-sm">
                   Select a category so it's easy for clients to find your
@@ -240,7 +240,7 @@ const Boostproject = () => {
                   />
                 </div>
               </div>
-              <div className="title w-full flex flex-col gap-1 border border-b-gray-300 pb-5 border-white">
+              <div className="title w-full flex flex-col gap-1 dark:border-none border border-b-gray-300 pb-5 border-white">
                 <p className="font-semibold">Description</p>
                 <p className="text-sm">
                   Select a category so it's easy for clients to find your
