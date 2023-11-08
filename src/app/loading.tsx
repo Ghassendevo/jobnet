@@ -5,7 +5,7 @@ import React from "react";
 const loading = () => {
   return (
     <main className="h-[100vh]">
-      <Skeleton className="w-full h-[60px]" />;
+      <Skeleton className="w-full h-[60px]" />
       <div className=" w-[70%] ml-auto mr-auto">
         <div className=" mt-10 mb-10">
           <Skeleton className="w-full h-[90px] rounded-3xl" />

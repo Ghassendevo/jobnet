@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { HtmlHTMLAttributes, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
@@ -248,7 +248,7 @@ const Boostproject = () => {
                 </p>
                 <Textarea
                   variant={"bordered"}
-                  label="Select a category"
+                  label="Your description"
                   className="w-full"
                   size="sm"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
