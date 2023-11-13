@@ -28,7 +28,7 @@ const BudgetUser: any = ({ data }) => {
             .join("")
             .toUpperCase()}
         </div>
-        <Link href={"/sdf"} className="capitalize hover:underline hover:text-yellow-700">
+        <Link href={"/sdf"} className="capitalize hover:underline-black hover:text-yellow-700">
           {userdata.fullname}
         </Link>
       </div>
