@@ -12,7 +12,7 @@ import axios from "axios";
 import { login } from "@/redux/slices/sessionSlice";
 import { RootState } from "@/redux/store";
 import { useRouter } from "next-nprogress-bar";
-
+import io from "socket.io-client";
 interface sessionData {
   fullname: string;
   email: string;
@@ -22,7 +22,8 @@ interface sessionData {
   _id: string;
 }
 const Login = () => {
-  const router = useRouter()
+  const socket = io("http://localhost:3001"); // Replace with your Socket.io server URL
+  const router = useRouter();
   const [isloading, setisloading] = useState(false);
   const [invalidinfo, setinvalidinfo] = useState(false);
   const [form, setForm] = useState({
@@ -64,10 +65,14 @@ const Login = () => {
         })
         .then((res) => {
           if (res.data.msg) {
+            socket.on("connect", () => {
+              console.log("Connected to Socket.io server");
+              // Additional logic for handling socket events can be added here
+            });
             localStorage.setItem("session", JSON.stringify(res.data.user));
             let data: sessionData = res.data.user;
             dispatch(login({ data: data, loggedin: true }));
-            router.push("/")
+            router.push("/");
           } else {
             setinvalidinfo(true);
             setTimeout(() => {

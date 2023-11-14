@@ -4,7 +4,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import Header from "@/components/headerHome/Header";
 import Boostproject from "@/components/boostproject/Boostproject";
 import Jobs from "@/components/jobs/Jobs";
-import { getjobsAPi } from "@/APIs/APIS";
+import {getjobsAPi } from "@/APIs/APIS";
 import BudgetUser from "@/components/UserBudget/BudgetUser";
 import { Suspense } from "react";
 

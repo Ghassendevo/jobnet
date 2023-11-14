@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { motion as m } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { Input } from "@nextui-org/react";
+import io from "socket.io-client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +18,7 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useRouter } from "next-nprogress-bar";
+import { Badge, Avatar } from "@nextui-org/react";
 import { Button } from "../ui/button";
 interface sessionData {
   fullname: string;
@@ -32,6 +34,8 @@ const Header = () => {
   const pathname = usePathname();
 
   const [userData, setUserData] = useState<sessionData>();
+  const [notification, setNotification] = useState([]);
+  const usersession = useSelector((state: RootState) => state.session.data);
   useEffect(() => {
     const data = localStorage.getItem("session");
     if (data) {
@@ -40,9 +44,23 @@ const Header = () => {
     } else {
       router.push("/login");
     }
+    const socket = io("http://localhost:3001");
+    socket.on("receive_notification", (data) => {
+     console.log(userData)
+      // if (data.userId == userData._id) {
+      //   setNotification([...notification, data]);
+      // }
+    });
+
+    //
   }, []);
+
   const logout = () => {
     localStorage.removeItem("session");
+  };
+  const notilength = () => {
+    let noti = notification.filter((notification) => notification.viewed);
+    return noti.length;
   };
   const [position, setPosition] = React.useState("jobs");
   return (
@@ -61,7 +79,13 @@ const Header = () => {
             endContent={
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="rounded-lg w-[15vh]" size={"sm"} >for {position}</Button>
+                  <Button
+                    variant="outline"
+                    className="rounded-lg w-[15vh]"
+                    size={"sm"}
+                  >
+                    for {position}
+                  </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56">
                   <DropdownMenuLabel>Search type</DropdownMenuLabel>
@@ -114,7 +138,9 @@ const Header = () => {
               pathname == "/notification" ? "border-b-yellow-400" : "",
             ].join(" ")}
           >
-            <BellIcon className="text-black h-6 w-6" />
+            <Badge content={notilength()} color="danger">
+              <BellIcon className="text-black h-6 w-6" />
+            </Badge>
           </m.div>
         </div>
       </div>

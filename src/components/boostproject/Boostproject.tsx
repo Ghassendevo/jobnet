@@ -135,16 +135,19 @@ const Boostproject = () => {
       setisloading(false);
     }
   };
+  const [isopen, setisopen] = useState(false);
   return (
     <div className="w-[full] p-10  shadow-sm flex flex-row justify-between">
       <div className="flex gap-4 flex-col">
         <h1 className="text-[23px] font-[550] font-nue">
           Stand out in search results by boosting your Catalog projects
         </h1>
-
         <Sheet>
           <SheetTrigger asChild>
-            <Button className="bg-yellow-300 max-w-fit text-black rounded-2xl hover:bg-yellow-400 pl-10 pr-10">
+            <Button
+              onClick={() => setisopen(true)}
+              className="bg-yellow-300 max-w-fit text-black rounded-2xl hover:bg-yellow-400 pl-10 pr-10"
+            >
               Boost a project
             </Button>
           </SheetTrigger>

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { formatDistanceToNow } from "date-fns";
 import { motion as m } from "framer-motion";
+import io from 'socket.io-client';
 import {
   Sheet,
   SheetClose,
@@ -34,11 +35,11 @@ const Jobs: any = async ({ data }) => {
   const jobs = useSelector((state: RootState) => state.post);
   const [isopen, setisopen] = useState(false);
   const [dataselected, setdataselected] = useState();
-  const datajobs = [...jobs, ...data];
+  const datajobs = data ? [...jobs, ...data] : [];
   return (
     <>
       <div className="flex w-full flex-col pb-20">
-        {datajobs.map((val, index) => {
+        {datajobs.length > 0 &&  datajobs.map((val, index) => {
           const timeAgo = formatDistanceToNow(new Date(val.date), {
             addSuffix: true,
           });
@@ -59,10 +60,11 @@ const Jobs: any = async ({ data }) => {
                   }}
                   className="p-5  transition duration-300 ease-in-out rounded-t-3xl dark:hover:bg-[#25250baa] hover:bg-[#faf8ecaa] hover:cursor-pointer"
                 >
-                  <div className="jobheader  capitalize flex flex-row text-md">
+                  <div className="jobheader  capitalize flex items-center gap-3 flex-row text-md">
                     <p className="font-[550] hover:text-yellow-800 hover:underline">
                       {val.title}
                     </p>
+                    <p className="text-xs">Posted by:{val.fullname}</p>
                   </div>
                   <div className="jobcontent pt-7">
                     <p className="text-gray-400 text-xs">
@@ -89,10 +91,11 @@ const Jobs: any = async ({ data }) => {
                   }}
                   className="p-5  transition duration-300 ease-in-out dark:hover:bg-[#25250baa] hover:bg-[#faf8ecaa] hover:cursor-pointer"
                 >
-                  <div className="jobheader  capitalize flex flex-row text-md">
+                  <div className="jobheader  capitalize flex items-center gap-4 flex-row text-md">
                     <p className="font-[550] hover:text-yellow-800 hover:underline">
                       {val.title}
                     </p>
+                    <p className="text-xs">posted by:{val.fullname}</p>
                   </div>
                   <div className="jobcontent pt-7">
                     <p className="text-gray-400 text-xs">
@@ -129,6 +132,7 @@ interface job {
   budgetFrom: string;
   budgetTo: string;
   bids: number;
+  user:string;
   description: string;
   bid: [];
   star: string;
@@ -149,8 +153,11 @@ const Sheetjobs = ({
   const timeAgo = formatDistanceToNow(new Date(data.date), {
     addSuffix: true,
   });
+  const socket = io('http://localhost:3001');
   const userinfo = useSelector((state: RootState) => state.session.data);
+  
   const [form, setForm] = useState({
+    user:data.user,
     jobId: data._id,
     uesrId: userinfo._id,
     userFullname: userinfo.fullname,
@@ -193,6 +200,9 @@ const Sheetjobs = ({
             title: "Project:#" + form.jobId,
             description: "Your bid send succesfully.",
           });
+          console.log(data)
+          socket.emit("send_notification",{...form,user:data.user})
+          close(false)
         })
         .catch((err) => {
           setisloading(false);
@@ -369,7 +379,7 @@ const Sheetjobs = ({
             <Button
               variant="default"
               onClick={handleSubmit}
-              disabled={!validform()}
+              disabled={!validform() || isloading}
               className="bg-yellow-300 min-w-[20vh] text-black w-fit hover:bg-yellow-400"
             >
               {(isloading && <ThreeDots color="black" width={25} />) || "Send proposal"}
