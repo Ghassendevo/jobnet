@@ -8,7 +8,3 @@ export const getjobsAPi = async () => {
   return res.data;
 };
 
-export const getUserSession = async () => {
-  const data = localStorage.getItem("session");
-  const userDataredux = JSON.parse(data);
-};
