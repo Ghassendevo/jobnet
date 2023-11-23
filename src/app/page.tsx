@@ -18,7 +18,7 @@ export default async function Home() {
           <Boostproject />
         </div>
         <div className="flex justify-between gap-4 flex-wrap">
-          <div className="flex-3   border border-gray-200 rounded-3xl">
+          <div className="flex-3  md:w-[70%] w-full   border border-gray-200 rounded-3xl">
             <Jobs data={data} />
           </div>
           <div className="hidden md:flex-1 md:flex  justify-center items-center  h-fit border border-gray-200 rounded-3xl cursor-pointer">

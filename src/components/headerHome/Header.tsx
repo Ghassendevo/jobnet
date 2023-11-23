@@ -15,11 +15,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { formatDistanceToNow } from "date-fns";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useRouter } from "next-nprogress-bar";
 import { Badge, Avatar } from "@nextui-org/react";
 import { Button } from "../ui/button";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
+
 interface sessionData {
   fullname: string;
   email: string;
@@ -45,22 +56,33 @@ const Header = () => {
       router.push("/login");
     }
     const socket = io("http://localhost:3001");
-    socket.on("receive_notification", (data) => {
-     console.log(userData)
-      // if (data.userId == userData._id) {
-      //   setNotification([...notification, data]);
-      // }
-    });
-
-    //
+    const handleNotification = (d) => {
+      console.log(d);
+      if (d.user === JSON.parse(data)._id) {
+        setNotification((prevNotification) => [...prevNotification, d]);
+        console.log(notification.length);
+      }
+    };
+    socket.on("receive_notification", handleNotification);
+    return () => {
+      socket.off("receive_notification", handleNotification);
+    };
   }, []);
 
   const logout = () => {
     localStorage.removeItem("session");
   };
-  const notilength = () => {
-    let noti = notification.filter((notification) => notification.viewed);
-    return noti.length;
+  const notiNotView = () => {
+    let noti = notification.filter((notification) => !notification.viewed);
+    return noti;
+  };
+  const viewNotification = () => {
+    setNotification((prevNotifications) =>
+      prevNotifications.map((notification) => ({
+        ...notification,
+        viewed: true,
+      }))
+    );
   };
   const [position, setPosition] = React.useState("jobs");
   return (
@@ -129,19 +151,58 @@ const Header = () => {
           >
             <BackpackIcon className="text-black h-6 w-6" />
           </m.div>
-          <m.div
-            whileHover={{
-              borderBottom: "3px solid #facc15",
-            }}
-            className={[
-              "pb-2 pt-2 border-3 border-white cursor-pointer  ",
-              pathname == "/notification" ? "border-b-yellow-400" : "",
-            ].join(" ")}
-          >
-            <Badge content={notilength()} color="danger">
-              <BellIcon className="text-black h-6 w-6" />
-            </Badge>
-          </m.div>
+          <Menubar className="border-none shadow-none">
+            <MenubarMenu>
+              <MenubarTrigger>
+                <m.div
+                  onClick={viewNotification}
+                  whileHover={{
+                    borderBottom: "3px solid #facc15",
+                  }}
+                  className={[
+                    "pb-2 pt-2 border-3  cursor-pointer border-none",
+                    pathname == "/notification" ? "border-b-yellow-400" : "",
+                  ].join(" ")}
+                >
+                  <Badge
+                    content={
+                      notiNotView().length != 0 ? notiNotView().length : null
+                    }
+                    color="danger"
+                  >
+                    <BellIcon className="text-black h-6 w-6 dark:text-white" />
+                  </Badge>
+                </m.div>
+              </MenubarTrigger>
+              <MenubarContent>
+                {notification.length > 0 &&
+                  notification.slice().reverse().map((val, index) => {
+                    const timeAgo = formatDistanceToNow(new Date(val.date), {
+                      addSuffix: true,
+                    });
+                    return (
+                      <>
+                        <MenubarItem className="p-5 hover:cursor-pointer">
+                          <div className=" flex flex-row justify-between  gap-5">
+                            <div className="flex flex-col gap-2">
+                              <p>{val.userFullname} applied for your job </p>
+                              <p className="text-gray-600 text-xs">
+                                Job ID: #{val._id}
+                              </p>
+                              <p className="text-gray-600 text-xs">{timeAgo}</p>
+                            </div>
+                            <span className="bg-blue-600 w-[8px] h-[8px] text-blue-600 rounded-full">
+                              {""}
+                            </span>
+                          </div>
+                        </MenubarItem>
+                        {index!=notification.length-1 && <MenubarSeparator />}
+                      </>
+                    );
+                  })}
+              </MenubarContent>
+            </MenubarMenu>
+          </Menubar>
         </div>
       </div>
       <div className="avatar">
