@@ -14,14 +14,14 @@ export default async function Home() {
     <main className="h-[100vh]">
       <Header />
       <div className="md:w-[70%] w-full  ml-auto mr-auto">
-        <div className="border border-gray-200 rounded-3xl mt-10 mb-10">
+        <div className="border border-gray-200 rounded-md mt-10 mb-10">
           <Boostproject />
         </div>
         <div className="flex justify-between gap-4 flex-wrap">
-          <div className="flex-3  md:w-[70%] w-full   border border-gray-200 rounded-3xl">
+          <div className="flex-3  md:w-[70%] w-full   border border-gray-200 rounded-md">
             <Jobs data={data} />
           </div>
-          <div className="hidden md:flex-1 md:flex  justify-center items-center  h-fit border border-gray-200 rounded-3xl cursor-pointer">
+          <div className="hidden md:flex-1 md:flex  justify-center items-center  h-fit border border-gray-200 rounded-md cursor-pointer">
             <BudgetUser data={data} />
           </div>
         </div>

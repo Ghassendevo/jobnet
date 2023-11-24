@@ -100,7 +100,7 @@ const Header = () => {
   return (
     <div className="shadow-sm h-16 flex justify-between pl-36 pr-36 items-center">
       <div className="logo">
-        <h3 className="text-black  ">JobNet</h3>
+        <h3 className="text-black">JobNet</h3>
       </div>
       <div className="menu flex flex-row w-[60%]  justify-between gap-4">
         <div className="search flex items-center  justify-center">

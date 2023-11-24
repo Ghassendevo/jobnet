@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { formatDistanceToNow } from "date-fns";
 import { motion as m } from "framer-motion";
-import io from 'socket.io-client';
+import io from "socket.io-client";
 import {
   Sheet,
   SheetClose,
@@ -38,86 +38,87 @@ const Jobs: any = async ({ data }) => {
   const datajobs = data ? [...jobs, ...data] : [];
   return (
     <>
-      <div className="flex w-full flex-col pb-20">
-        {datajobs.length > 0 &&  datajobs.map((val, index) => {
-          const timeAgo = formatDistanceToNow(new Date(val.date), {
-            addSuffix: true,
-          });
-          return (
-            <div
-              key={index}
-              onClick={(e) => {
-                setdataselected(val), setisopen(true);
-              }}
-              className="shadow-sm   w-full"
-            >
-              {index == 0 ? (
-                <m.div
-                  key={index}
-                  initial={{ opacity: 0 }}
-                  animate={{
-                    opacity: 1,
-                  }}
-                  className="p-5  transition duration-300 ease-in-out rounded-t-3xl dark:hover:bg-[#25250baa] hover:bg-[#faf8ecaa] hover:cursor-pointer"
-                >
-                  <div className="jobheader  capitalize flex items-center gap-3 flex-row text-md">
-                    <p className="font-[550] hover:text-yellow-800 hover:underline">
-                      {val.title}
-                    </p>
-                    <p className="text-xs">Posted by:{val.fullname}</p>
-                  </div>
-                  <div className="jobcontent pt-7">
-                    <p className="text-gray-400 text-xs">
-                      Hourly - Expert - Est. Time: Less than 1 month, Less than
-                      30 hrs/week - {timeAgo}
-                    </p>
-                    <p className="pt-4 text-sm text-gray-600">
-                      {val.description}
-                    </p>
-                    <p className="pt-5 text-xs text-gray-400">
-                      Proposals: {val.bids}
-                    </p>
-                    <p className="pt-5 flex flex-row items-center gap-2 text-xs text-g">
-                      <CheckIcon className="bg-blue-500 rounded-xl text-white" />
-                      Payment verified{" "}
-                    </p>
-                  </div>
-                </m.div>
-              ) : (
-                <m.div
-                  initial={{ opacity: 0 }}
-                  animate={{
-                    opacity: 1,
-                  }}
-                  className="p-5  transition duration-300 ease-in-out dark:hover:bg-[#25250baa] hover:bg-[#faf8ecaa] hover:cursor-pointer"
-                >
-                  <div className="jobheader  capitalize flex items-center gap-4 flex-row text-md">
-                    <p className="font-[550] hover:text-yellow-800 hover:underline">
-                      {val.title}
-                    </p>
-                    <p className="text-xs">posted by:{val.fullname}</p>
-                  </div>
-                  <div className="jobcontent pt-7">
-                    <p className="text-gray-400 text-xs">
-                      Hourly - Expert - Est. Time: Less than 1 month, Less than
-                      30 hrs/week - {timeAgo}
-                    </p>
-                    <p className="pt-4 text-sm text-gray-600">
-                      {val.description}
-                    </p>
-                    <p className="pt-5 text-xs text-gray-400">
-                      Proposals: {val.bids}
-                    </p>
-                    <p className="pt-5 flex flex-row items-center gap-2 text-xs text-g">
-                      <CheckIcon className="bg-blue-500 rounded-xl text-white" />
-                      Payment verified{" "}
-                    </p>
-                  </div>
-                </m.div>
-              )}
-            </div>
-          );
-        })}
+      <div className="flex w-full h-fit flex-col ">
+        {datajobs.length > 0 &&
+          datajobs.map((val, index) => {
+            const timeAgo = formatDistanceToNow(new Date(val.date), {
+              addSuffix: true,
+            });
+            return (
+              <div
+                key={index}
+                onClick={(e) => {
+                  setdataselected(val), setisopen(true);
+                }}
+                className="shadow-sm   w-full"
+              >
+                {index == 0 ? (
+                  <m.div
+                    key={index}
+                    initial={{ opacity: 0 }}
+                    animate={{
+                      opacity: 1,
+                    }}
+                    className="p-5 transition duration-300 ease-in-out rounded-t-md dark:hover:bg-[#25250baa] hover:bg-[#faf8ecaa] hover:cursor-pointer"
+                  >
+                    <div className="jobheader  capitalize flex items-center gap-3 flex-row text-md">
+                      <p className="font-[550] hover:text-yellow-800 hover:underline">
+                        {val.title}
+                      </p>
+                      <p className="text-xs">Posted by:{val.fullname}</p>
+                    </div>
+                    <div className="jobcontent pt-7">
+                      <p className="text-gray-400 text-xs">
+                        Hourly - Expert - Est. Time: Less than 1 month, Less
+                        than 30 hrs/week - {timeAgo}
+                      </p>
+                      <p className="pt-4 text-sm text-gray-600">
+                        {val.description}
+                      </p>
+                      <p className="pt-5 text-xs text-gray-400">
+                        Proposals: {val.bids}
+                      </p>
+                      <p className="pt-5 flex flex-row items-center gap-2 text-xs text-g">
+                        <CheckIcon className="bg-blue-500 rounded-xl text-white" />
+                        Payment verified{" "}
+                      </p>
+                    </div>
+                  </m.div>
+                ) : (
+                  <m.div
+                    initial={{ opacity: 0 }}
+                    animate={{
+                      opacity: 1,
+                    }}
+                    className="p-5  transition duration-300 ease-in-out dark:hover:bg-[#25250baa] hover:bg-[#faf8ecaa] hover:cursor-pointer"
+                  >
+                    <div className="jobheader  capitalize flex items-center gap-4 flex-row text-md">
+                      <p className="font-[550] hover:text-yellow-800 hover:underline">
+                        {val.title}
+                      </p>
+                      <p className="text-xs">posted by:{val.fullname}</p>
+                    </div>
+                    <div className="jobcontent pt-7">
+                      <p className="text-gray-400 text-xs">
+                        Hourly - Expert - Est. Time: Less than 1 month, Less
+                        than 30 hrs/week - {timeAgo}
+                      </p>
+                      <p className="pt-4 text-sm text-gray-600">
+                        {val.description}
+                      </p>
+                      <p className="pt-5 text-xs text-gray-400">
+                        Proposals: {val.bids}
+                      </p>
+                      <p className="pt-5 flex flex-row items-center gap-2 text-xs text-g">
+                        <CheckIcon className="bg-blue-500 rounded-xl text-white" />
+                        Payment verified{" "}
+                      </p>
+                    </div>
+                  </m.div>
+                )}
+              </div>
+            );
+          })}
       </div>
       {isopen && (
         <Sheetjobs data={dataselected} isopen={isopen} close={setisopen} />
@@ -132,7 +133,7 @@ interface job {
   budgetFrom: string;
   budgetTo: string;
   bids: number;
-  user:string;
+  user: string;
   description: string;
   bid: [];
   star: string;
@@ -153,11 +154,11 @@ const Sheetjobs = ({
   const timeAgo = formatDistanceToNow(new Date(data.date), {
     addSuffix: true,
   });
-  const socket = io('http://localhost:3001');
+  const socket = io("http://localhost:3001");
   const userinfo = useSelector((state: RootState) => state.session.data);
-  
+
   const [form, setForm] = useState({
-    user:data.user,
+    user: data.user,
     jobId: data._id,
     uesrId: userinfo._id,
     userFullname: userinfo.fullname,
@@ -194,15 +195,15 @@ const Sheetjobs = ({
           data: form,
         })
         .then((res) => {
-          setisloading(false)
+          setisloading(false);
           toast({
             variant: "default",
             title: "Project:#" + form.jobId,
             description: "Your bid send succesfully.",
           });
-          console.log(data)
-          socket.emit("send_notification",{...form,user:data.user})
-          close(false)
+          console.log(data);
+          socket.emit("send_notification", { ...form, user: data.user });
+          close(false);
         })
         .catch((err) => {
           setisloading(false);
@@ -293,7 +294,7 @@ const Sheetjobs = ({
             <div className="flex flex-row gap-1 items-center">
               <p className="text-md flex flex-row items-center gap-1">
                 <p className="text-gray-500 text-sm">Proposals:</p>{" "}
-                <div className="flex justify-center items-center bg-yellow-200 w-[20px] h-[20px] rounded-2xl">
+                <div className="flex justify-center items-center dark:bg-yellow-400 bg-yellow-200 w-[20px] h-[20px] rounded-2xl">
                   <CubeIcon width={13} />
                 </div>{" "}
               </p>
@@ -302,7 +303,7 @@ const Sheetjobs = ({
             <div className="flex flex-row gap-1 items-center">
               <p className="text-md flex flex-row items-center gap-1">
                 <p className="text-gray-500 text-sm">Last viewed by client:</p>{" "}
-                <div className="flex justify-center items-center bg-yellow-200 w-[20px] h-[20px] rounded-2xl">
+                <div className="flex justify-center items-center dark:bg-yellow-400 bg-yellow-200 w-[20px] h-[20px] rounded-2xl">
                   <CubeIcon width={13} />
                 </div>{" "}
               </p>
@@ -382,7 +383,8 @@ const Sheetjobs = ({
               disabled={!validform() || isloading}
               className="bg-yellow-300 min-w-[20vh] text-black w-fit hover:bg-yellow-400"
             >
-              {(isloading && <ThreeDots color="black" width={25} />) || "Send proposal"}
+              {(isloading && <ThreeDots color="black" width={25} />) ||
+                "Send proposal"}
             </Button>
             <Button variant="ghost" onClick={(e) => close(false)}>
               Back
