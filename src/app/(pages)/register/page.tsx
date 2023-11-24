@@ -3,7 +3,7 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div><Create_account /></div>
+    <div className='h-screen'><Create_account /></div>
   )
 }
 

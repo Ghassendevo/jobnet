@@ -30,6 +30,8 @@ import {
   MenubarShortcut,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import { getNotification } from "@/APIs/APIS";
+import Link from "next/link";
 
 interface sessionData {
   fullname: string;
@@ -47,17 +49,27 @@ const Header = () => {
   const [userData, setUserData] = useState<sessionData>();
   const [notification, setNotification] = useState([]);
   const usersession = useSelector((state: RootState) => state.session.data);
+
   useEffect(() => {
     const data = localStorage.getItem("session");
+    const fetchNoti = async (id: string) => {
+      let data = await getNotification(id);
+      // if (data.length > 0) {
+      //   const notificationExists = notification.some((n) => n._id === data._id);
+      //   if (!notificationExists && data.length > 0) {
+      //     setNotification((prev) => [...prev, data]);
+      //   }
+      // }
+    };
     if (data) {
       const n = JSON.parse(data);
       setUserData(n);
+      fetchNoti(n._id);
     } else {
       router.push("/login");
     }
     const socket = io("http://localhost:3001");
     const handleNotification = (d) => {
-      console.log(d);
       if (d.user === JSON.parse(data)._id) {
         setNotification((prevNotification) => [...prevNotification, d]);
         console.log(notification.length);
@@ -129,27 +141,29 @@ const Header = () => {
           />
         </div>
         <div className="icons flex items-center justify-between  w-[50%] gap-4">
+          <Link href={"/"}>
+            <m.div
+              whileHover={{
+                borderBottom: "3px solid #facc15",
+              }}
+              className={[
+                "pb-2 pt-2 border-3 border-none cursor-pointer ",
+                pathname == "/" ? "border-b-yellow-400" : "",
+              ].join(" ")}
+            >
+              <HomeIcon className="text-black h-6 w-6 dark:text-white" />
+            </m.div>
+          </Link>
           <m.div
             whileHover={{
               borderBottom: "3px solid #facc15",
             }}
             className={[
-              "pb-2 pt-2 border-3 border-white cursor-pointer ",
-              pathname == "/" ? "border-b-yellow-400" : "",
-            ].join(" ")}
-          >
-            <HomeIcon className="text-black h-6 w-6" />
-          </m.div>
-          <m.div
-            whileHover={{
-              borderBottom: "3px solid #facc15",
-            }}
-            className={[
-              "pb-2 pt-2 border-3 border-white cursor-pointer  ",
+              "pb-2 pt-2 border-3  cursor-pointer border-none  ",
               pathname == "/jobs" ? "border-b-yellow-400" : "",
             ].join(" ")}
           >
-            <BackpackIcon className="text-black h-6 w-6" />
+            <BackpackIcon className="text-black h-6 w-6 dark:text-white" />
           </m.div>
           <Menubar className="border-none shadow-none">
             <MenubarMenu>
@@ -176,30 +190,45 @@ const Header = () => {
               </MenubarTrigger>
               <MenubarContent>
                 {notification.length > 0 &&
-                  notification.slice().reverse().map((val, index) => {
-                    const timeAgo = formatDistanceToNow(new Date(val.date), {
-                      addSuffix: true,
-                    });
-                    return (
-                      <>
-                        <MenubarItem className="p-5 hover:cursor-pointer">
-                          <div className=" flex flex-row justify-between  gap-5">
-                            <div className="flex flex-col gap-2">
-                              <p>{val.userFullname} applied for your job </p>
-                              <p className="text-gray-600 text-xs">
-                                Job ID: #{val._id}
-                              </p>
-                              <p className="text-gray-600 text-xs">{timeAgo}</p>
-                            </div>
-                            <span className="bg-blue-600 w-[8px] h-[8px] text-blue-600 rounded-full">
-                              {""}
-                            </span>
-                          </div>
-                        </MenubarItem>
-                        {index!=notification.length-1 && <MenubarSeparator />}
-                      </>
-                    );
-                  })}
+                  notification
+                    .slice()
+                    .reverse()
+                    .map((val, index) => {
+                      const timeAgo = formatDistanceToNow(new Date(val.date), {
+                        addSuffix: true,
+                      });
+                      return (
+                        <>
+                          <MenubarItem
+                            key={index}
+                            className="p-5 hover:cursor-pointer"
+                          >
+                            <Link href={`/job?id=${val._id}`}>
+                              {" "}
+                              <div className=" flex flex-row justify-between  gap-5">
+                                <div className="flex flex-col gap-2">
+                                  <p>
+                                    {val.userFullname} applied for your job{" "}
+                                  </p>
+                                  <p className="text-gray-600 text-xs">
+                                    Job ID: #{val._id}
+                                  </p>
+                                  <p className="text-gray-600 text-xs">
+                                    {/* {timeAgo} */}
+                                  </p>
+                                </div>
+                                <span className="bg-blue-600 w-[8px] h-[8px] text-blue-600 rounded-full">
+                                  {""}
+                                </span>
+                              </div>
+                            </Link>
+                          </MenubarItem>
+                          {index != notification.length - 1 && (
+                            <MenubarSeparator />
+                          )}
+                        </>
+                      );
+                    })}
               </MenubarContent>
             </MenubarMenu>
           </Menubar>

@@ -7,4 +7,11 @@ export const getjobsAPi = async () => {
   const res = await axios.post("http://localhost:3001/getPost");
   return res.data;
 };
-
+export const getNotification = async (id: string) => {
+  const res = await axios.get(`http://localhost:3001/getNotification/${id}`);
+  return res.data;
+};
+export const getBidData = async (id: string | string[]) => {
+  const res = await axios.get(`http://localhost:3001/getBid/${id}`);
+  return res.data;
+};
