@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { formatDistanceToNow } from "date-fns";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useRouter } from "next-nprogress-bar";
 import { Badge, Avatar } from "@nextui-org/react";
@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/menubar";
 import { getNotification } from "@/APIs/APIS";
 import Link from "next/link";
+import { login } from "@/redux/slices/sessionSlice";
 
 interface sessionData {
   fullname: string;
@@ -49,7 +50,7 @@ const Header = () => {
   const [userData, setUserData] = useState<sessionData>();
   const [notification, setNotification] = useState([]);
   const usersession = useSelector((state: RootState) => state.session.data);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const data = localStorage.getItem("session");
     const fetchNoti = async (id: string) => {
@@ -63,6 +64,7 @@ const Header = () => {
     };
     if (data) {
       const n = JSON.parse(data);
+      dispatch(login({ data: n, loggedin: true }));
       setUserData(n);
       fetchNoti(n._id);
     } else {
@@ -154,17 +156,19 @@ const Header = () => {
               <HomeIcon className="text-black h-6 w-6 dark:text-white" />
             </m.div>
           </Link>
-          <m.div
-            whileHover={{
-              borderBottom: "3px solid #facc15",
-            }}
-            className={[
-              "pb-2 pt-2 border-3  cursor-pointer border-none  ",
-              pathname == "/jobs" ? "border-b-yellow-400" : "",
-            ].join(" ")}
-          >
-            <BackpackIcon className="text-black h-6 w-6 dark:text-white" />
-          </m.div>
+          <Link href={"/work"}>
+            <m.div
+              whileHover={{
+                borderBottom: "3px solid #facc15",
+              }}
+              className={[
+                "pb-2 pt-2 border-3  cursor-pointer border-none  ",
+                pathname == "/jobs" ? "border-b-yellow-400" : "",
+              ].join(" ")}
+            >
+              <BackpackIcon className="text-black h-6 w-6 dark:text-white" />
+            </m.div>
+          </Link>
           <Menubar className="border-none shadow-none">
             <MenubarMenu>
               <MenubarTrigger>

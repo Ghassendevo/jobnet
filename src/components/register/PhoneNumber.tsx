@@ -111,6 +111,7 @@ const PhoneNumber = () => {
             localStorage.setItem("session", JSON.stringify(res.data.user));
             let data: sessionData = res.data.user;
             dispatch(login({ data: data, loggedin: true }));
+            router.push("/")
         })
         .catch((err) => {
           setisloadingcontinue(false);
