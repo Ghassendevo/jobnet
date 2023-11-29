@@ -11,7 +11,7 @@ import { Suspense } from "react";
 export default async function Home() {
   const data = await getjobsAPi();
   return (
-    <main className="h-[100vh]">
+    <main className="h-fit">
       <Header />
       <div className="md:w-[70%] w-full  ml-auto mr-auto">
         <div className="border border-gray-200 rounded-md mt-10 mb-10">
