@@ -232,7 +232,7 @@ const Header = () => {
                           )}
                         </>
                       );
-                    })}
+                    }) || <p className="p-5 text-center">No notification</p>}
               </MenubarContent>
             </MenubarMenu>
           </Menubar>
