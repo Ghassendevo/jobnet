@@ -26,6 +26,8 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { Accordion, AccordionItem } from "@nextui-org/react";
+
 const Work = () => {
   const usersession = useSelector((state: RootState) => state.session.data);
   const [isloading, setisloading] = useState(true);
@@ -73,6 +75,7 @@ const Work = () => {
 
     setsearchjobs(newData);
   }
+  
   const categorys = [
     "Web development",
     "mobile development",
@@ -110,7 +113,7 @@ const Work = () => {
                 </span>
               </div>
               <Modal
-               className="max-w-[900px] "
+                className="max-w-[900px] "
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 isDismissable={false}
@@ -160,6 +163,7 @@ const Work = () => {
                                   //   e: React.ChangeEvent<HTMLSelectElement>
                                   // ) => handleCat(e)}
                                   label="Select a category"
+                                  disabled
                                   className="w-full"
                                   size="sm"
                                   defaultSelectedKeys="0"
@@ -340,10 +344,66 @@ const Work = () => {
                         </p>
                       </div>
                       {val.bids > 0 && (
-                        <div className="w-full flex items-center justify-center">
-                          <p className="text-xs text-gray-700 hover:underline">
-                            View bids
-                          </p>
+                        <div className="w-full flex items-center justify-center pt-5">
+                          <Accordion variant="splitted">
+                            <AccordionItem
+                              key="1"
+                              aria-label="Accordion 1"
+                              title={"View bids " + val.bids}
+                            >
+                              <Accordion variant="splitted">
+                                {val.bid.map((bid, key) => {
+                                  const timeAgo = formatDistanceToNow(
+                                    new Date(bid.date),
+                                    {
+                                      addSuffix: true,
+                                    }
+                                  );
+                                  return (
+                                    <AccordionItem
+                                      key={key}
+                                      aria-label={"Bid" + key}
+                                      title={
+                                        "Bid ID # " + bid._id + " " + timeAgo
+                                      }
+                                    >
+                                      <div>
+                                        <div className="flex gap-1 flex-col pb-5">
+                                          <div className="flex gap-1 p-5 flex-col">
+                                            <p className="font-semibold text-lg">
+                                              Bid id: #{bid._id}
+                                            </p>
+                                            <p className="text-sm">{timeAgo}</p>
+                                            <p>
+                                              Amount:{" "}
+                                              <span className="bg-yellow-300 p-1 text-sm rounded-sm">
+                                                {bid.amount}
+                                              </span>
+                                            </p>
+                                            <p>
+                                              days:{" "}
+                                              <span className="bg-yellow-300 p-1 text-sm rounded-sm">
+                                                {bid.days}
+                                              </span>
+                                            </p>
+                                            <p className="capitalize text-sm hover:underline cursor-pointer text-yellow-600">
+                                              bid by {bid.fullname}
+                                            </p>
+                                          </div>
+                                          <div className="bg-gray-100 p-3 dark:bg-gray-900 rounded-sm flex flex-col gap-3 hover:border hover:border-yellow-500">
+                                            <p className="text-xs">
+                                              Description
+                                            </p>
+                                            <p> {bid.desc}</p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </AccordionItem>
+                                  );
+                                })}
+                              </Accordion>
+                            </AccordionItem>
+                          </Accordion>
                         </div>
                       )}
                     </m.div>
@@ -414,10 +474,66 @@ const Work = () => {
                         </p>
                       </div>
                       {val.bids > 0 && (
-                        <div className="w-full flex items-center justify-center">
-                          <p className="text-xs text-gray-700 hover:underline">
-                            View bids
-                          </p>
+                        <div className="w-full flex items-center justify-center pt-5">
+                          <Accordion variant="splitted">
+                            <AccordionItem
+                              key="1"
+                              aria-label="Accordion 1"
+                              title={"View bids " + val.bids}
+                            >
+                              <Accordion variant="splitted">
+                                {val.bid.map((bid, key) => {
+                                  const timeAgo = formatDistanceToNow(
+                                    new Date(bid.date),
+                                    {
+                                      addSuffix: true,
+                                    }
+                                  );
+                                  return (
+                                    <AccordionItem
+                                      key={key}
+                                      aria-label={"Bid" + key}
+                                      title={
+                                        "Bid ID # " + bid._id + " " + timeAgo
+                                      }
+                                    >
+                                      <div>
+                                        <div className="flex gap-1 flex-col pb-5">
+                                          <div className="flex gap-1 p-5 flex-col">
+                                            <p className="font-semibold text-lg">
+                                              Bid id: #{bid._id}
+                                            </p>
+                                            <p className="text-sm">{timeAgo}</p>
+                                            <p>
+                                              Amount:{" "}
+                                              <span className="bg-yellow-300 p-1 text-sm rounded-sm">
+                                                {bid.amount}
+                                              </span>
+                                            </p>
+                                            <p>
+                                              days:{" "}
+                                              <span className="bg-yellow-300 p-1 text-sm rounded-sm">
+                                                {bid.days}
+                                              </span>
+                                            </p>
+                                            <p className="capitalize text-sm hover:underline cursor-pointer text-yellow-600">
+                                              bid by {bid.fullname}
+                                            </p>
+                                          </div>
+                                          <div className="bg-gray-100 p-3 dark:bg-gray-900 rounded-sm flex flex-col gap-3 hover:border hover:border-yellow-500">
+                                            <p className="text-xs">
+                                              Description
+                                            </p>
+                                            <p> {bid.desc}</p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </AccordionItem>
+                                  );
+                                })}
+                              </Accordion>
+                            </AccordionItem>
+                          </Accordion>
                         </div>
                       )}
                     </m.div>
