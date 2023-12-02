@@ -25,7 +25,6 @@ export default async function Home() {
             <BudgetUser data={data} />
           </div>
         </div>
-        <ModeToggle />
       </div>
     </main>
   );

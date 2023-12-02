@@ -75,7 +75,7 @@ const Work = () => {
 
     setsearchjobs(newData);
   }
-  
+
   const categorys = [
     "Web development",
     "mobile development",
@@ -137,6 +137,14 @@ const Work = () => {
                               </p>
                               <Input
                                 variant="bordered"
+                                defaultValue={
+                                  selectedJob.id
+                                    ? jobs.find(
+                                        (val) => val._id === selectedJob.id
+                                      )?.title
+                                    : undefined
+                                }
+                                disabled
                                 startContent={
                                   <p className="text-xs  w-[90px] font-semibold">
                                     You will get a{" "}
@@ -193,6 +201,13 @@ const Work = () => {
                                   variant="bordered"
                                   size="md"
                                   labelPlacement="outside"
+                                  defaultValue={
+                                    selectedJob.id
+                                      ? jobs.find(
+                                          (val) => val._id === selectedJob.id
+                                        )?.budgetFrom
+                                      : undefined
+                                  }
                                   // onChange={(
                                   //   e: React.ChangeEvent<HTMLInputElement>
                                   // ) => handleBudgetfrom(e)}
@@ -205,6 +220,13 @@ const Work = () => {
                                   type="number"
                                   label="budget to"
                                   variant="bordered"
+                                  defaultValue={
+                                    selectedJob.id
+                                      ? jobs.find(
+                                          (val) => val._id === selectedJob.id
+                                        )?.budgetTo
+                                      : undefined
+                                  }
                                   // onChange={(
                                   //   e: React.ChangeEvent<HTMLInputElement>
                                   // ) => handleBudgetto(e)}
@@ -226,6 +248,13 @@ const Work = () => {
                               <Textarea
                                 variant={"bordered"}
                                 label="Your description"
+                                defaultValue={
+                                  selectedJob.id
+                                    ? jobs.find(
+                                        (val) => val._id === selectedJob.id
+                                      )?.description
+                                    : undefined
+                                }
                                 className="w-full"
                                 size="sm"
                                 // onChange={(

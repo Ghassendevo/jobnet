@@ -2,6 +2,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface sessionData {
   data: {
+    city?: string;
+    description?:string;
+    skill?:string;
     fullname: string;
     email: string;
     password: string;
@@ -15,6 +18,9 @@ interface sessionData {
 const initialState: sessionData = {
   data: {
     fullname: "",
+    city:"",
+    description:"",
+    skill:"",
     email: "",
     password: "",
     phone: "",

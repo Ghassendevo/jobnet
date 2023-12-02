@@ -3,7 +3,7 @@ import React from "react";
 
 const page = () => {
   return (
-    <div className="h-fit">
+    <div className="h-screen">
       <Work />
     </div>
   );

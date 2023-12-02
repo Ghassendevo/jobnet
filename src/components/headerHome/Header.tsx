@@ -193,7 +193,7 @@ const Header = () => {
                 </m.div>
               </MenubarTrigger>
               <MenubarContent>
-                {notification.length > 0 &&
+                {(notification.length > 0 &&
                   notification
                     .slice()
                     .reverse()
@@ -232,7 +232,7 @@ const Header = () => {
                           )}
                         </>
                       );
-                    }) || <p className="p-5 text-center">No notification</p>}
+                    })) || <p className="p-5 text-center">No notification</p>}
               </MenubarContent>
             </MenubarMenu>
           </Menubar>
@@ -246,8 +246,10 @@ const Header = () => {
           <DropdownMenuContent>
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Setting</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={"/profile?id="+usersession._id}>Profile</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem><Link href={"/setting"}>Setting</Link></DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
                 localStorage.removeItem("session"), router.push("/login");
