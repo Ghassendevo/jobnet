@@ -6,6 +6,7 @@ import {
   HomeIcon,
   TimerIcon,
 } from "@radix-ui/react-icons";
+import jobnetlogo from "../../../assets/jobnetlogo.jpeg"
 import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion as m } from "framer-motion";
 import { usePathname } from "next/navigation";
@@ -44,6 +45,7 @@ import { Toast } from "@radix-ui/react-toast";
 import { useToast } from "../ui/use-toast";
 import { Sheet, SheetContent, SheetFooter, SheetHeader } from "../ui/sheet";
 import { ThreeDots } from "react-loader-spinner";
+import Image from "next/image";
 interface sessionData {
   fullname: string;
   email: string;
@@ -138,7 +140,7 @@ const Header = () => {
   return (
     <div className="shadow-sm h-16 flex justify-between md:pl-36  pl-5 pr-5  md:pr-36 items-center">
       <div className="logo">
-        <h3 className="text-black">JobNet</h3>
+        <Image src={jobnetlogo} alt="logo" width={130}  />
       </div>
       <AnimatePresence>
         {search.length > 0 && (
@@ -146,7 +148,7 @@ const Header = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="shadow-md p-5 z-1 bg-white rounded-sm text-center absolute top-[60px] left-[23%] w-[45vh]"
+            className="shadow-md p-5 z-1 bg-white dark:bg-[#020817] rounded-sm text-center absolute top-[60px] md:left-[23%] left-[0%] w-[45vh]"
           >
             <div className="">
               {(dataLoading && <Spinner size="sm" />) ||
@@ -157,7 +159,9 @@ const Header = () => {
                         <div className="flex flex-row hover:bg-gray-100 rounded-sm p-2 ">
                           <div
                             onClick={(e) => {
-                              setdataselected(val), setisopen(true);
+                              setdataselected(val),
+                                setisopen(true),
+                                setSearch("");
                             }}
                             className="w-full text-left flex flex-col gap-0 cursor-pointer"
                           >
@@ -321,7 +325,7 @@ const Header = () => {
           </Menubar>
         </div>
       </div>
-      <div className="avatar">
+      <div className="avatar md:block hidden">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant={"outline"}>{userData?.username}</Button>
