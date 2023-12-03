@@ -1,6 +1,7 @@
 "use client";
 import { RootState } from "@/redux/store";
 import Link from "next/link";
+import { useRouter } from "next-nprogress-bar";
 import React from "react";
 import { useSelector } from "react-redux";
 
@@ -13,10 +14,13 @@ const BudgetUser: any = ({ data }) => {
     }
     return color;
   }
-
+  const router = useRouter();
   const userdata = useSelector((state: RootState) => state.session.data);
   return (
-    <div className=" flex justify-center">
+    <div
+      className=" flex justify-center"
+      onClick={(e) => router.push("/profile?id=" + userdata._id)}
+    >
       <div className="forimage flex flex-col gap-3 justify-center items-center p-10">
         <div
           style={{ backgroundColor: getRandomColor() }}
@@ -28,7 +32,10 @@ const BudgetUser: any = ({ data }) => {
             .join("")
             .toUpperCase()}
         </div>
-        <Link href={"/sdf"} className="capitalize hover:underline-black hover:text-yellow-700">
+        <Link
+          href={"/sdf"}
+          className="capitalize hover:underline-black hover:text-yellow-700"
+        >
           {userdata.fullname}
         </Link>
       </div>
