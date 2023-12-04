@@ -24,9 +24,9 @@ function generateRandomCode() {
 }
 const AWS = require('aws-sdk');
 const sns = new AWS.SNS({
-    accessKeyId: 'AKIAQ4UPHVVNTVP5JJ7E',
-    secretAccessKey: 'fGq224wi+orITjM92D1+jxlDFwMOWXEmL4IuUFBh',
-    region: 'us-east-1', // Change this to your desired AWS region
+    accessKeyId: '',
+    secretAccessKey: '',
+    region: '', // Change this to your desired AWS region
 });
 const io = new Server(server, {
     cors: {
@@ -37,9 +37,9 @@ const io = new Server(server, {
 
 
 AWS.config.update({
-    accessKeyId: 'AKIAQ4UPHVVNTVP5JJ7E',
-    secretAccessKey: 'fGq224wi+orITjM92D1+jxlDFwMOWXEmL4IuUFBh',
-    region: 'us-east-1', // Change this to your desired AWS region
+    accessKeyId: '',
+    secretAccessKey: '',
+    region: '', // Change this to your desired AWS region
 })
 const autousername = (fullname) => {
     const nickname = fullname.split(' ')[0];
